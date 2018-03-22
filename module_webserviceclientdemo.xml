@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_webserviceclientdemo" default="compile.module.webserviceclientdemo">
+  <dirname property="module.webserviceclientdemo.basedir" file="${ant.file.module_webserviceclientdemo}"/>
+  
+  <property name="module.jdk.home.webserviceclientdemo" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.webserviceclientdemo" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.webserviceclientdemo" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.webserviceclientdemo" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="webserviceclientdemo.output.dir" value="${module.webserviceclientdemo.basedir}/out/production/webServiceClientDemo"/>
+  <property name="webserviceclientdemo.testoutput.dir" value="${module.webserviceclientdemo.basedir}/out/test/webServiceClientDemo"/>
+  
+  <path id="webserviceclientdemo.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="webserviceclientdemo.module.production.classpath">
+    <path refid="${module.jdk.classpath.webserviceclientdemo}"/>
+    <path refid="library.jax-ws-glassfish_/_jax-ws_2.2_ri_/_metro_1.x_/_jwsdp_2.2.classpath"/>
+    <path refid="library.tomcat_8.0.44.classpath"/>
+  </path>
+  
+  <path id="webserviceclientdemo.runtime.production.module.classpath">
+    <pathelement location="${webserviceclientdemo.output.dir}"/>
+    <path refid="library.jax-ws-glassfish_/_jax-ws_2.2_ri_/_metro_1.x_/_jwsdp_2.2.classpath"/>
+  </path>
+  
+  <path id="webserviceclientdemo.module.classpath">
+    <path refid="${module.jdk.classpath.webserviceclientdemo}"/>
+    <pathelement location="${webserviceclientdemo.output.dir}"/>
+    <path refid="library.jax-ws-glassfish_/_jax-ws_2.2_ri_/_metro_1.x_/_jwsdp_2.2.classpath"/>
+    <path refid="library.tomcat_8.0.44.classpath"/>
+  </path>
+  
+  <path id="webserviceclientdemo.runtime.module.classpath">
+    <pathelement location="${webserviceclientdemo.testoutput.dir}"/>
+    <pathelement location="${webserviceclientdemo.output.dir}"/>
+    <path refid="library.jax-ws-glassfish_/_jax-ws_2.2_ri_/_metro_1.x_/_jwsdp_2.2.classpath"/>
+    <path refid="library.tomcat_8.0.44.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.webserviceclientdemo">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.webserviceclientdemo">
+    <patternset refid="excluded.from.module.webserviceclientdemo"/>
+  </patternset>
+  
+  <path id="webserviceclientdemo.module.sourcepath">
+    <dirset dir="${module.webserviceclientdemo.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.webserviceclientdemo" depends="compile.module.webserviceclientdemo.production,compile.module.webserviceclientdemo.tests" description="Compile module webServiceClientDemo"/>
+  
+  <target name="compile.module.webserviceclientdemo.production" depends="register.custom.compilers" description="Compile module webServiceClientDemo; production classes">
+    <mkdir dir="${webserviceclientdemo.output.dir}"/>
+    <javac2 destdir="${webserviceclientdemo.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.webserviceclientdemo}/javac">
+      <compilerarg line="${compiler.args.webserviceclientdemo}"/>
+      <bootclasspath refid="webserviceclientdemo.module.bootclasspath"/>
+      <classpath refid="webserviceclientdemo.module.production.classpath"/>
+      <src refid="webserviceclientdemo.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.webserviceclientdemo"/>
+    </javac2>
+    
+    <copy todir="${webserviceclientdemo.output.dir}">
+      <fileset dir="${module.webserviceclientdemo.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.webserviceclientdemo.tests" depends="register.custom.compilers,compile.module.webserviceclientdemo.production" description="compile module webServiceClientDemo; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.webserviceclientdemo" description="cleanup module">
+    <delete dir="${webserviceclientdemo.output.dir}"/>
+    <delete dir="${webserviceclientdemo.testoutput.dir}"/>
+  </target>
+</project>
